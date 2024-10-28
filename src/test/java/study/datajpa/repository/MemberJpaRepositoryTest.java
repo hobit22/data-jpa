@@ -79,4 +79,20 @@ class MemberJpaRepositoryTest {
         assertThat(deletedCount).isEqualTo(0);
     }
 
+    @Test
+    @DisplayName("유저이름과 나이로 유저를 찾을 수 있다.")
+    void findByUsernameAndAgeGreaterThan() {
+        // given
+        Member memberA = new Member("memberA", 10);
+        Member memberB = new Member("memberB", 10);
+
+        memberJpaRepository.save(memberA);
+        memberJpaRepository.save(memberB);
+
+        // when
+        List<Member> result = memberJpaRepository.findByUsernameAndAgeGreaterThan("memberA", 15);
+
+        // then
+        assertThat(result.size()).isEqualTo(1);
+    }
 }

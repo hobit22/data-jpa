@@ -36,6 +36,11 @@ public class Member {
         changeTeam(team);
     }
 
+    public Member(String username, int age) {
+        this.username = username;
+        this.age = age;
+    }
+
     // DB에서는 Member의 team_id만 변경되지만 객체에서는 Team도 변경해줘야함.
     public void changeTeam(Team team) {
         this.team = team;
