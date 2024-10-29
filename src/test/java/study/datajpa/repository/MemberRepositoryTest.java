@@ -1,5 +1,7 @@
 package study.datajpa.repository;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.entity.Member;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,6 +23,9 @@ class MemberRepositoryTest {
 
     @Autowired
     MemberRepository memberRepository;
+
+    @PersistenceContext
+    EntityManager em;
 
     @DisplayName("멤버를 저장할 수 있다.")
     @Test
@@ -114,6 +120,27 @@ class MemberRepositoryTest {
         assertThat(page.getTotalPages()).isEqualTo(3);
         assertThat(page.isFirst()).isTrue();
         assertThat(page.hasNext()).isTrue();
+    }
+
+
+    @Test
+    @DisplayName("벌크 업데이트 테스트")
+    void bulkUpdate() {
+        // given
+        memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member2", 19));
+        memberRepository.save(new Member("member3", 20));
+        memberRepository.save(new Member("member4", 21));
+        memberRepository.save(new Member("member5", 40));
+
+        // when
+        int result = memberRepository.bulkAgePlus(20);
+        em.flush(); // 쿼리 실행
+        em.clear(); // 영속성 컨텍스트 전부 삭제
+
+
+        // then
+        assertThat(result).isEqualTo(3);
     }
 
 }
