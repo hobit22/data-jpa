@@ -4,12 +4,16 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+import study.datajpa.repository.MemberRepository;
 
 import java.util.List;
+import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -19,6 +23,8 @@ class MemberTest {
 
     @PersistenceContext
     EntityManager em;
+    @Autowired
+    private MemberRepository memberRepository;
 
     @DisplayName("멤버를 생성할 수 있다.")
     @Test
@@ -53,4 +59,25 @@ class MemberTest {
         }
     }
 
+
+    @Test
+    @DisplayName("jpa auditing test")
+    void jpaAuditingTest() throws Exception {
+        // given
+        Member member = new Member("member1", 10, new Team("teamA"));
+        memberRepository.save(member);
+
+        Thread.sleep(1000);
+
+        member.setUsername("aaaa");
+        em.flush();
+        em.clear();
+
+        // when
+        Member findMember = memberRepository.findById(member.getId()).get();
+
+        // then
+        assertThat(findMember.getUpdatedDate()).isNotNull();
+        assertThat(findMember.getUsername()).isEqualTo("aaaa");
+    }
 }
