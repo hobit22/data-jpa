@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.entity.Member;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -142,5 +141,20 @@ class MemberRepositoryTest {
         // then
         assertThat(result).isEqualTo(3);
     }
+
+    @Test
+    @DisplayName("지연 로딩 테스트")
+    void findMemberLazy() {
+        // given
+
+
+        // when
+
+
+        // then
+
+
+    }
+
 
 }
