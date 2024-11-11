@@ -2,6 +2,9 @@ package study.datajpa.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 
 @Entity
 @Getter
@@ -22,6 +25,13 @@ public class Member extends JpaBaseEntity {
     @ManyToOne(fetch = FetchType.LAZY) // 성능 최적화 하기 쉽도록 LAZY로 세팅
     @JoinColumn(name = "team_id")
     private Team team;
+
+    @CreatedBy
+    @Column(updatable = false)
+    private String createdBy;
+
+    @LastModifiedBy
+    private String lastModifiedBy;
 
     public Member(String username) {
         this.username = username;
