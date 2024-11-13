@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @SpringBootApplication
-@EnableJpaAuditing
+@EnableJpaAuditing(modifyOnCreate = false)
 //@EnableJpaRepositories(basePackages = "study.datajpa.repository") spring boot 에서는 생략 가능
 public class DataJpaApplication {
 
